@@ -15,16 +15,41 @@
                 <td v-for="(table,index) in tables">
                     <input type="button" :value="table" @click="chooseTable(index)" />
                 </td>
+                <td>
+                    <input type="button" value="添加项" @click="addItem()" />
+                </td> 
             </tr>
             <tr>
                 <td v-for="lable in lables">{{lable}}</td>
             </tr>
-            <tr>
-                <td v-for="(val,i) in tempItem">
-                    <input v-model="tempItem[i]">
-                </td>         
-            </tr>  
+            <tr v-for="(item,index) in content">
+                <td v-for="i in item">{{i}}</td>
+                <td>
+                    <input type="button" value="编辑" @click="modifyItem(item)" />
+                </td> 
+                <td>
+                    <input type="button" value="删除" @click="deleteItem(item)" />
+                </td>          
+            </tr> 
+            
         </table> 
+        <!-- modify page start -->
+        <div id="modify" v-show="modifyFlag">
+            <div class="modify-box">
+                <div class="modify-inner-box">
+                    <ul>
+                        <li v-for="(value, name) in modifyTemp">
+                            <span>{{name}}</span>
+                            <!-- 不应该直接将v-model绑定到v-for的别名上（其相当于局部变量） -->
+                            <input v-model="modifyTemp[name]">
+                        </li>
+                    </ul>
+                    <input type="button" value="提交" @click="submitModify()" />
+                    <input type="button" value="取消" @click="closeModifyPage()" />
+                </div>
+            </div>
+        </div>
+        <!-- modify page end -->
           
     </div>
     {% endraw %}
