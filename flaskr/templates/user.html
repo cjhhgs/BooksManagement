@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user page</title>
+</head>
+<body>
+    {% raw %}
+    <div id="user">
+        <h2>用户中心</h2>
+        <h3>借书记录</h3>
+        <table border="1">
+            <tr>
+                <td>序号</td>
+                <td>username</td>
+                <td>book_id</td>
+            </tr>
+            <tr v-for="(record,index) in records">
+                <td v-for="i in record">{{i}}</td>
+                <td>
+                    <input type="button" value="还书" @click="returnBook(record)" />
+                </td>          
+            </tr>  
+        </table> 
+        
+    </div>
+    {% endraw %}
+
+    <!-- javascript -->
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 官网提供的 axios 在线地址 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script src="{{url_for('static', filename='js/index_dynamic.js')}}"></script> -->
+    <script src="{{url_for('static', filename='js/user.js')}}"></script>
+    
+</body>
+</html>

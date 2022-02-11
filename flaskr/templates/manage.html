@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manage</title>
+</head>
+<body>
+    {% raw %}
+    <div id="manage">
+        
+        <table border="1">
+            <tr>
+                <td v-for="(table,index) in tables">
+                    <input type="button" :value="table" @click="chooseTable(index)" />
+                </td>
+            </tr>
+            <tr>
+                <td v-for="lable in lables">{{lable}}</td>
+            </tr>
+            <tr>
+                <td v-for="(val,i) in tempItem">
+                    <input v-model="tempItem[i]">
+                </td>         
+            </tr>  
+        </table> 
+          
+    </div>
+    {% endraw %}
+    <!-- javascript -->
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 官网提供的 axios 在线地址 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script src="{{url_for('static', filename='js/index_dynamic.js')}}"></script> -->
+    <script src="{{url_for('static', filename='js/manage.js')}}"></script>
+    
+</body>
+</html>

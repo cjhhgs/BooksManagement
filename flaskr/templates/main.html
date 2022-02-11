@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>main</title>
+    </head>
+<body>
+    
+    <div>
+        <a href="/bookmanage/user" class="btn">个人中心</a>
+        <a href="/bookmanage/manage" class="btn">管理界面</a>
+        {% for message in get_flashed_messages() %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% raw %}
+    <div id="book">
+        <h2>图书列表</h2>
+        <table border="1">
+            <tr>
+                <td v-for="lable in lables">{{lable}}</td>
+            </tr>
+            <tr v-for="(item,index) in content">
+                <td v-for="i in item">{{i}}</td>
+                <td>
+                    <input type="button" value="借书" @click="borrow(item[0])" />
+                </td>          
+            </tr>  
+        </table>   
+    </div>
+    {% endraw %}
+    <!-- javascript -->
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 官网提供的 axios 在线地址 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script src="{{url_for('static', filename='js/index_dynamic.js')}}"></script> -->
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    
+</body>
+</html>
