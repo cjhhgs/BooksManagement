@@ -119,7 +119,7 @@ def creat_app(test_config=None):
             print('get data:')
             print(res)
             user = getattr(flask_login.current_user, 'username', None)
-            print(user)
+            print('user:'+user)
             returnStatus = database.handle_requset(res,user)
             return {'statu': returnStatus, 'info': "ok"}
         

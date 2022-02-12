@@ -25,7 +25,7 @@
             <tr v-for="(item,index) in content">
                 <td v-for="i in item">{{i}}</td>
                 <td>
-                    <input type="button" value="编辑" @click="modifyItem(item)" />
+                    <input type="button" value="编辑" @click="modifyItem(item,index)" />
                 </td> 
                 <td>
                     <input type="button" value="删除" @click="deleteItem(item)" />
@@ -34,7 +34,7 @@
             
         </table> 
         <!-- modify page start -->
-        <div id="modify" v-show="modifyFlag">
+        <div id="modify" v-show="displayFlag">
             <div class="modify-box">
                 <div class="modify-inner-box">
                     <ul>
@@ -44,7 +44,8 @@
                             <input v-model="modifyTemp[name]">
                         </li>
                     </ul>
-                    <input type="button" value="提交" @click="submitModify()" />
+                    <input type="button" value="提交" @click="submitModify()" v-show="modifyFlag" />
+                    <input type="button" value="提交" @click="submitAdd()" v-show="addFlag" />
                     <input type="button" value="取消" @click="closeModifyPage()" />
                 </div>
             </div>

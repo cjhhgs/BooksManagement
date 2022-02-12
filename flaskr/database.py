@@ -14,6 +14,8 @@ def getUserList():
     sql = "select * from user"
     cur.execute(sql)
     content = cur.fetchall()
+    cur.close()
+    conn.close()
     return content
 
 def getTable(tablename):
@@ -33,31 +35,6 @@ def getTable(tablename):
 
     sql = "show fields from %s"%\
         (tablename)
-    cur.execute(sql)
-    labels = cur.fetchall()
-    labels = [l[0] for l in labels]
-    cur.close()
-    conn.close()
-
-    res = {"content":content,"lables":labels}
-    return res
-    return 1
-
-def getdata():
-    conn = pymysql.connect(
-        host="localhost",
-        port=3306,
-        db="bookmanage",
-        user="root",
-        passwd="123456",
-        charset='utf8'
-    )
-    cur = conn.cursor()
-    sql = "select * from book_list"
-    cur.execute(sql)
-    content = cur.fetchall()
-
-    sql = "show fields from book_list"
     cur.execute(sql)
     labels = cur.fetchall()
     labels = [l[0] for l in labels]
@@ -104,13 +81,18 @@ def handle_requset(req,user = None):
     info = req['info']
     print(way)
     print(info)
+    returnStatus = 0
 
     if way == "borrow":
         returnStatus = handle_borrow(info,user)
     if way == "returnBook":
         returnStatus = handle_returnBook(info,user)
-    if way == "inputBook":
-        returnStatus = handle_inputBook(info,user)
+    if way == "addItem":
+        returnStatus = handle_addItem(info,user)
+    if way == "deleteItem":
+        returnStatus = handle_deleteItem(info,user)
+    if way == "modifyItem":
+        returnStatus = handle_addItem(info,user)
     return returnStatus
 
 #借书的处理函数
@@ -165,6 +147,7 @@ def handle_borrow(info,user):
 
     return returnStatus
 
+#还书的处理函数
 def handle_returnBook(info,user):
     record_id = info["record_id"]
     username = info["username"]
@@ -207,13 +190,82 @@ def handle_returnBook(info,user):
     return returnStatus
 
 
-# info = {}
-def handle_inputBook(info,user):
-    sql = """INSERT INTO book_list ( name, auther,price,date,number )
+#添加表项的处理函数
+# info = {
+#    table:"xx",
+#    item:["xx","xx",……]
+# }
+def handle_addItem(info,user):
+    returnStatus=0
+    table = info["table"]
+    item = info["item"]
+    print(item)
+    if table == "book_list":
+        sql = """INSERT INTO book_list ( name, auther,price,date,number )
                        VALUES
-                       ("test1","xxx",13,"2019-2-1",10 );"""
-    return 1
+                       ("%s","%s",%s,"%s",%s );"""%\
+                           (item[1],item[2],item[3],item[4],item[5])
+    elif table == "user":
+        sql = """INSERT INTO user ( name, password,if_manager )
+                       VALUES
+                       ("%s","%s","%s");"""%\
+                           (item[1],item[2],item[3])
+    conn = pymysql.connect(
+        host="localhost",
+        port=3306,
+        db="bookmanage",
+        user="root",
+        passwd="123456",
+        charset='utf8'
+    )
+    cur = conn.cursor()
+    try:
+        cur.execute(sql)
+        conn.commit()
+        print("success")
+    except:
+        print("error")
+        returnStatus=3
+    
+    cur.close()
+    conn.close()
+    return returnStatus
 
+#删除表项
+# info = {
+#   table:'xxx'
+#   id:xxx
+# }
+def handle_deleteItem(info,user):
+    returnStatus=0
+    table = info["table"]
+    id = info["id"]
+    if table == 'book_list':
+        sql = "delete from book_list where book_id=%s"%\
+            (id)
+    elif table == 'user':
+        sql = "delete from user where id = %s"%\
+            (id)
+    conn = pymysql.connect(
+        host="localhost",
+        port=3306,
+        db="bookmanage",
+        user="root",
+        passwd="123456",
+        charset='utf8'
+    )
+    cur = conn.cursor()
+    try:
+        cur.execute(sql)
+        conn.commit()
+        print("success")
+    except:
+        print("error")
+        returnStatus=3
+    
+    cur.close()
+    conn.close()
+    return returnStatus
 
 def numOfBook(bookid):
     conn = pymysql.connect(
@@ -257,10 +309,14 @@ def ifBorrow(bookid,username):
 
 
 if __name__ =="__main__":
-    content = numOfBook(1)
-    print(content)
-    req = {'way': 'borrow', 'info': 1}
+    
+    req = {
+        'way': 'addItem', 
+        'info': {
+            'table':"book_list",
+            'item':[1,'时间简史','xxx',31,'2019-6-6',3]
+        }
+    }
     handle_requset(req,'root')
-    content = numOfBook(1)
-    print(content)
+    
     
