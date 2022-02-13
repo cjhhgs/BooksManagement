@@ -92,7 +92,7 @@ def handle_requset(req,user = None):
     if way == "deleteItem":
         returnStatus = handle_deleteItem(info,user)
     if way == "modifyItem":
-        returnStatus = handle_addItem(info,user)
+        returnStatus = handle_modifyItem(info,user)
     return returnStatus
 
 #借书的处理函数
@@ -266,6 +266,46 @@ def handle_deleteItem(info,user):
     cur.close()
     conn.close()
     return returnStatus
+
+# info={
+#   table:'xxx'
+#   oldInfo:[],
+#   newInfo:[]
+# }
+def handle_modifyItem(info,user):
+    returnStatus = 0
+    table = info['table']
+    oldInfo = info['oldInfo']
+    newInfo = info['newInfo']
+    id = oldInfo[0]
+
+    if table=='book_list':
+        sql = "update book_list set name='%s', auther='%s', price=%s, date='%s', number=%s where book_id = %s"%\
+            (newInfo[1],newInfo[2],newInfo[3],newInfo[4],newInfo[5],id)
+    elif table=='user':
+        sql = "update user set name='%s', password='%s', if_manager='%s' where id =%s"%\
+            (newInfo[1],newInfo[2],newInfo[3],id)
+    conn = pymysql.connect(
+        host="localhost",
+        port=3306,
+        db="bookmanage",
+        user="root",
+        passwd="123456",
+        charset='utf8'
+    )
+    cur = conn.cursor()
+    try:
+        cur.execute(sql)
+        conn.commit()
+        print("success")
+    except:
+        print("error")
+        returnStatus=3
+    
+    cur.close()
+    conn.close()
+    return returnStatus
+
 
 def numOfBook(bookid):
     conn = pymysql.connect(

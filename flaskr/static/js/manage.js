@@ -21,6 +21,7 @@ axios.get("/bookmanage/database?table=book_list")
                 chooseTable:function(index){
                     this.closeModifyPage();
                     var _this = this;
+                    this.tableIndex = index;
                     var table = this.tables[index];
                     axios.get("/bookmanage/database?table="+table)
                         .then((response) =>{
@@ -72,7 +73,7 @@ axios.get("/bookmanage/database?table=book_list")
                             var returnStatu = response.data
                             if (returnStatu.statu == 0) {
                                 alert(returnStatu.info)
-                                res = true;
+                                
                             }
                         })
                         .catch((response) => {
@@ -136,9 +137,10 @@ axios.get("/bookmanage/database?table=book_list")
                 },
 
                 submitModify:function(){
+                    var _this = this
                     this.newInfo = [];
                     for (key in this.modifyTemp) {
-                        newInfo.push(this.modifyTemp[key]);
+                        this.newInfo.push(this.modifyTemp[key]);
                     }
                     var config = {
                         way:"modifyItem",
@@ -161,11 +163,16 @@ axios.get("/bookmanage/database?table=book_list")
                         .catch((response) => {
                             console.log(response);
                         }).then(function(){
-                            if(res == true){
-                                this.$set(this.content, this.modifyIndex, this.newInfo);
-                            }
-                            this.modifyFlag = false;
-                            this.displayFlag = false;
+                            _this.modifyFlag = false;
+                            _this.displayFlag = false;
+                            axios.get("/bookmanage/database?table="+_this.tables[_this.tableIndex])
+                                .then((response) =>{
+                                    _this.lables = response.data.lables
+                                    _this.content = response.data.content
+                                })
+                                .catch((response) => {
+                                    console.log(response);
+                                })
                         })
                 },
 
