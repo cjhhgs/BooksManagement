@@ -1,10 +1,10 @@
 -- source E:/git-demo/bookmanage/dbinit.sql
 DROP DATABASE IF EXISTS bookmanage;
-CREATE DATABASE IF NOT exists bookmanage
-default character set utf8
+CREATE DATABASE IF NOT exists bookmanage;
+default character set utf8;
 default collate utf8_general_ci;
 
-use bookmanage
+use bookmanage;
 
 -- 创建 book_list 总表
 create table if not exists book_list(
@@ -34,7 +34,3 @@ create table if not exists record(
     book_id int,
     primary key(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-source E:/git-demo/bookmanage/userinfo_insert.sql;
-
-source E:/git-demo/bookmanage/data_insert.sql;
